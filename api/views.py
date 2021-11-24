@@ -99,11 +99,12 @@ class PHView(View):
 
     # POST 요청을 처리하기 위해서 post함수를 재정의
     def post(self, request, *args, **kwargs):
+
         if request.META['CONTENT_TYPE'] == 'application/json':
             req = json.loads(request.body)
-            print('pH: ' + str(req['pH']) + '\n')
-
-            ph = Ph(ph=req['pH'])
+            pHValue = round(req['pH'], 2)
+            print('pH: ' + str(pHValue) + '\n')
+            ph = Ph(ph=pHValue)
             ph.save()
 
             data = {
