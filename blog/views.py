@@ -4,8 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from blog.forms import CommentForm
-from blog.models import Post, Category, Tag, Comment
+from blog.models import Post, Category
 
 
 # CBV(Class Based View)방식
@@ -55,7 +54,6 @@ class PostDetail(DetailView):
         context = super(PostDetail, self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
-        context['comment_form'] = CommentForm
         return context
 
 # FBV(Function Based View)방식
@@ -102,28 +100,7 @@ def category_page(request, slug):
     )
 
 
-def tag_page(request, slug):
-    tag = Tag.objects.get(slug=slug)
-    # tag 변수에 담긴 태그 객체를 가지는 Post 들을 불러와서  post_list 변수에 담는다
-    post_list = tag.post_set.all()
 
-
-    # 탬플릿은 post_list.heml을 사용
-    # 글 목록은 위에서 작성한 post_list 변수에 담는다
-    # 탬플릿에 넘길 때 post_list 변수로 넘긴다
-    # tag는 현재 화면에 보이는 테그페이지의 테그이름
-    # categories는 카테고리 카드에 사용하기 위한 변수
-    # no_category_post_count는 카테고리를 가지지 않는 포스트 수
-    return render(
-        request,
-        'blog/post_list.html',
-        {
-            'post_list': post_list,
-            'tag': tag,
-            'categories': Category.objects.all(),
-            'no_category_post_count': Post.objects.filter(category=None).count(),
-        }
-    )
 
 
 class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -340,90 +317,9 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
             return response
 
 
-def new_comment(request, pk):
-
-    if request.user.is_authenticated:
-        # 요청받은 주소에서 pk 번호를 이영해 Post테이블을 조회
-        # 해딩 pk를 가지는 포스타가 존제한다면 get 동작 수행
-        # 그렇지 않으면 404예외 발생, 코드 싱행 중단
-        # 클라이언트에게 404 응답을 보내게 된다
-        post = get_object_or_404(Post, pk=pk)
-
-        # 1. request 요청 내용 중 method 변수를 확인하여 POST 요청인지 확인한다
-        # 2. CommentForm에 POST 요청받은 내용을 담아 form 객체 생성
-        if request.method == 'POST':
-            comment_form = CommentForm(request.POST)
-
-            # form 객체 내부의 is_valid()함수를 실행하여 유효성 검사 후
-            # 이상이 없다면 if문 실행
-            if comment_form.is_valid():
-                # comment_form에 담긴 내용을 comment에 저장하는 동작은 하지만
-                # 트랜직션은 이루어지지 않았다(commit=False)
-                # comment 변수에 Comment 객체를 담음
-                comment = comment_form.save(commit=False)
-                # cpmment 객체에 post필드를 채워준다.(처음 pk로 불러온 post)
-                comment.post = post
-                # author 필드는 현재 로그인한 사용자의 객체를 담는다
-                comment.author = request.user
-
-                parent_id = request.POST.get('parent_id')
-                if parent_id:
-                    c = Comment.objects.get(pk=parent_id)
-                    comment.parent_id = c
-
-                else:
-                    # comment 객체의 모든 내용을 채웠으므로
-                    # 최종적으로 db에 저장. (트랜직션 이루어짐)
-                    # 만든 별점 버튼을 이용해서 받은 별점을 comment의 score필드에 저장
-                    comment.score = request.POST.get('my_score')
-                comment.save()
-                # 댓글이 작성된 곳으로 페이지 이동
-                return redirect(comment.get_absolute_url())
-        else:
-            # POST 요청 방식이 아닌경우 포스트 상세페이지로 다시 이동
-            return redirect(post.get_absolute_url())
-    else:
-        # 로그인 하지 않은 사용가자 접근한 경우: PermissionDenied 예외 발생하고
-        # 허가 거부 페이지를 응답으로 보낸다
-        raise PermissionDenied
 
 
-class CommentUpdate(LoginRequiredMixin, UpdateView):
-    model = Comment
-    form_class = CommentForm
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user == self.get_object().author:
-            return super(CommentUpdate, self).dispatch(request, *args, **kwargs)
-        else:
-            return PermissionDenied
-
-    def from_valid(self, form):
-        response = super(CommentUpdate, self).form_valid(form)
-        my_score = self.request.POST.get('my_score')
-
-        if my_score and (0 < int(my_score) <= 5):
-            self.object.score = my_score
-            self.object.save()
-
-        else:
-            raise ValueError('별점은 1~5점을 입력하셔야 합니다.')
 
 
-def delete_comment(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    post = comment.post
-    if request.user.is_authenticated and request.user == comment.author:
-        comment.delete()
-        return redirect(post.get_absolute_url())
-    else:
-        raise PermissionDenied
-
-
-def ajax(request):
-    return render(
-        request,
-        'blog/ajax.html'
-    )
 
 
