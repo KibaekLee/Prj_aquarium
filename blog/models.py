@@ -7,20 +7,9 @@ from markdownx.utils import markdown
 from markdownx.models import MarkdownxField
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return f'/blog/tag/{self.slug}/'
-
-
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
 
     def __str__(self):
         return self.name
@@ -39,23 +28,14 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=30)
-    hook_text = models.CharField(max_length=100, blank=True)
     content = MarkdownxField()
 
-    head_image = models.ImageField(upload_to='blog/image/%Y/%m/%d/', blank=True)
-    file_upload = models.FileField(upload_to='blog/file/%Y/%m/%d/', blank=True)
-
     create_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     # CASCADE: 작성자 정보가 User 테이블에서 삭제 시, 작성한 글 모두 삭제
     # SET_NULL: 작성자 정보가 User 테이블에서 삭제 시, 작성한 글 삭제 않함
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
-
-    # '''태그 필드 추가: 다대다 관계는 ManyToMany Filed 사용
-    # (일대다 관계일때 ForeignKey 사용하는 것과 비교)'''
-    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.author}'
@@ -79,31 +59,5 @@ class Post(models.Model):
             return f'https://doitdjango.com/avatar/id/336/fc65bf1a8db8d8fb/svg/{self.author.email}'
 
 
-class Comment(models.Model):
-    # CASCADE: POST글이 삭제되면 댓글도 같이 삭제되면 댓글도 같이 삭제
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
-    score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=1)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    parent_id = models.ForeignKey('self', on_delete=models.CASCADE, null=True, default=None) #'self': 자기 참조
-
-    def __str__(self):
-        return f'{self.author}::{self.content}::{self.score}'
-
-    def get_absolute_url(self):
-        return f'{self.post.get_absolute_url()}#comment-{self.pk}'
-
-    def get_avatar_url(self):
-        if self.author.socialaccount_set.exists():
-            return self.author.socialaccount_set.first().get_avatar_url()
-        else:
-            return f'https://doitdjango.com/avatar/id/336/fc65bf1a8db8d8fb/svg/{self.author.email}'
-
-    def get_child_comment(self):
-        comments = Comment.objects.filter(parent_id=self.pk)
-        return comments
 
 
