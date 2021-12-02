@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <div class="container">
         <!-- 브랜드 명을 입력하는 부분 -->
-        <a class="navbar-brand" href="/">Aquarium Care System</a>
+        <a class="navbar-brand text-light" href="/">Aquarium Care System</a>
 
         <!-- navbar-expand-lg 클래스를 nav 태그에서 사용한 경우는 992px보다 작을경우 아래 버튼 표시-->
         <!-- 아래 버튼은 폰 화면 크기에서 메뉴를 보였다 숨겼다 하는 버튼-->
@@ -18,18 +18,18 @@
         <!-- 메뉴 구성하는 부분 -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- 네비게이션의 좌측부분 (mr-auto 적용하여 좌측정렬)-->
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto ">
                 <!-- 첫 번째 메뉴 -->
                 <li class="nav-item active ">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link text-light" href="/">Home</a>
                 </li>
                 <!-- 두 번째 메뉴 -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="/blog/">Charts</a>
+                    <a class="nav-link text-light" href="/blog/">Charts</a>
                 </li>
                 <!-- 다섯 번째 메뉴 -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="/admin/">Admin</a>
+                    <a class="nav-link text-light" href="/admin/">Admin</a>
                 </li>
 
             </ul>
@@ -52,14 +52,14 @@
                         {{user.username }}
                     </a>
                     <!-- 드롭다운 메뉴 구성 -->
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu ">
                         <a class="dropdown-item" href="/accounts/logout/">Log Out</a>
                     </div>
                 </li>
                 {% else %}
                 <!-- 로그인 버튼 -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
+                    <a class="nav-link text-light" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
                 </li>
                 {% endif %}
             </ul>

@@ -4,7 +4,7 @@
 <head>
 
     <link href="{% static 'blog/bootstrap/bootstrap.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'single_pages/css/landing.css' %}" rel="stylesheet" type="text/css" media="screen">
+    <link href="{% static 'blog/css/landing.css' %}" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/f825ae5235.js" crossorigin="anonymous"></script>
 
     <script src="https://d3js.org/d3.v6.min.js"></script>
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'blog/billboard/billboard.css' %}">
 
     <meta charset="UTF-8">
-    <title>Welcome to our Aquarium</title>
+    <title>Welcome to the Aquarium</title>
 
 </head>
 <body>
@@ -20,19 +20,20 @@
 {% include  'blog/navbar.html' %}
 
 <section>
-    <div class="container mt-5">
+    <div class="container mt-5 ">
         <li class="row justify-content-between">
 
             <!--  grape   -->
             <div class="col-lg-12 bg-white rounded">
                 <p class="alert alert-success" role="alert">
-                    Today's pH and temperature check!
+                    Today's pH and temperature check! {{ph.created_at}}
                 </p>
                 <div id="chart"></div>
             </div>
 
+
             <div class="mt-5">
-                <h2 class="text-light">Blog - Recent posts</h2>
+                <h2 class="text-light">Recent Charts</h2>
                 {% for post in recent_posts %}
                 <div class="card mt-1">
                     <div class="card-body">
@@ -67,7 +68,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
         integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
         crossorigin="anonymous"></script>
-<script src="{% static 'blog/js/my-scripts.js' %}"></script>
 
 <script>
         function getPH(){
@@ -98,7 +98,7 @@
                         x: {
                           type: "timeseries",
                           tick: {
-                            format: "%Y/%m/%d %H:%M:%S"
+                            format: "%H:%M:%S"
                           }
                         }
                       },
