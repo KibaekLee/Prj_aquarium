@@ -24,11 +24,7 @@
     <!-- 블로그 포스트 카드의 그림영역 -->
     <div id="chart"></div>
     <!-- 블로그 글의 요약 부분 -->
-    <div class="card-body">
-        <p class="card-text">{{p.get_content_markdown | truncatewords_html:45 | safe }}</p>
-
-        <a class="btn btn-primary" href="{{p.get_absolute_url}}">Read More</a>
-    </div>
+    
 </div>
 {% endfor %}
 
