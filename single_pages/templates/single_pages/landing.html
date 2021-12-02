@@ -9,7 +9,7 @@
 
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="{% static 'blog/billboard/billboard.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'blog/billboard/billboard.css' %}">
+    <link  href="{% static 'blog/billboard/billboard.css' %}" rel="stylesheet">
 
     <meta charset="UTF-8">
     <title>Welcome to the Aquarium</title>
@@ -34,13 +34,12 @@
 
             <div class="mt-5">
                 <h2 class="text-light">Recent Charts</h2>
-                {% for post in recent_posts %}
                 <div class="card mt-1">
                     <div class="card-body">
                         <h6>
                             <a href="{{ post.get_absolute_url }}"
                                class="text_decoration-none text-dark">
-                                {{ post.title }}
+
                             </a>
                         </h6>
                         <span class="badge badge-pill badge-light float-right">
@@ -48,7 +47,6 @@
                         </span>
                     </div>
                 </div>
-                {% endfor %}
             </div>
         </li>
     </div>
