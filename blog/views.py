@@ -5,7 +5,12 @@ from django.utils.text import slugify
 from django.views.generic import ListView
 
 from blog.models import Post, Category
+import datetime
+import json
 
+from django.core import serializers
+from django.http import JsonResponse
+from api.models import Ph
 
 class PostList(ListView):
     model = Post
@@ -27,6 +32,8 @@ class PostList(ListView):
         # 탬플릿으로 전달하기 위해서 작성
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
+
+    
 
 
 def category_page(request, slug):

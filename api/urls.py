@@ -4,4 +4,5 @@ from api import views
 
 urlpatterns = [
     path('ph/', views.PHView.as_view()),
+    path('ph/now', views.nowPHView.as_view()),
 ]
