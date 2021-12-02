@@ -31,9 +31,6 @@ class Post(models.Model):
     content = MarkdownxField()
 
     create_at = models.DateTimeField(auto_now_add=True)
-
-    # CASCADE: 작성자 정보가 User 테이블에서 삭제 시, 작성한 글 모두 삭제
-    # SET_NULL: 작성자 정보가 User 테이블에서 삭제 시, 작성한 글 삭제 않함
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
 

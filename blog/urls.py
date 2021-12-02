@@ -2,10 +2,7 @@ from django.urls import path
 from .import views
 
 urlpatterns = [
-    path('update_post/<int:pk>/', views.PostUpdate.as_view()),
-    # /blog/create_post/를 요청을 받으면
-    # CBV 방식으로 PostCreate 클래스의 as.view()함수를 호출
-    path('create_post/', views.PostCreate.as_view()),
+
     # 테그 페이지 url 자리를 위해 아래 코드를 작성
     # slug는 문자열 형태이므로 str 키워드를 사용 (아래 <int:pk>와 비교)
     # 두번째 파라메터는 첫 번째 파라메터 형식의 URL을 입력했을 때 실행할 view를 지정
@@ -15,7 +12,7 @@ urlpatterns = [
     # 두번째 파라메터는 첫 번째 파라메터 형식의 URL을 입력했을 때 실행할 view를 지정
     # 여기서 FBV 방식으로 views.py 파일의 category_page()함수를 호출
     path('category/<str:slug>/', views.category_page),
-    path('<int:pk>/', views.PostDetail.as_view()),
+
     # path('<int:pk>/', views.single_post_page)
     # 서버주소/blog/<int.pk>
     path("", views.PostList.as_view()),
