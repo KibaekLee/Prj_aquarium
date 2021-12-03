@@ -10,7 +10,8 @@ import json
 
 from django.core import serializers
 from django.http import JsonResponse
-from api.models import Ph
+from api.models import Arduino
+
 
 class PostList(ListView):
     model = Post

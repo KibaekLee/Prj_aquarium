@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import Ph
+from api.models import Arduino
 
-admin.site.register(Ph)
+admin.site.register(Arduino)
 
