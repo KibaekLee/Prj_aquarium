@@ -79,9 +79,11 @@
 
                     var aPH = ["pH"];
                     var aX = ["x"];
+                    var aTemperature = ["T"]
 
                     for (item of items) {
                         aPH.push(item.fields.ph);
+                        aTemperature.push(item.fields.temperature);
                         aX.push(item.fields.created_at.split('.')[0]);
                     }
 
@@ -89,7 +91,7 @@
                       data: {
                         x: "x",
                         xFormat: "%Y-%m-%dT%H:%M:%S",
-                        columns: [aX, aPH, ],
+                        columns: [aX, aPH, aTemperature],
                         type: "line", // for ESM specify as: line()
                       },
                       axis: {
@@ -104,7 +106,7 @@
                     });
                         }
                     };
-            async.open('GET', '/api/ph', true);
+            async.open('GET', '/api/arduino', true);
             async.send();
 
         }
