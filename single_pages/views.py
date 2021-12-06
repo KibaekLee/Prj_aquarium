@@ -1,11 +1,11 @@
 from django.shortcuts import render
 
-from blog.models import Post
+from api.models import Arduino
 
 
 def landing(request):
+
     return render(
         request,
-        'single_pages/landing.html',
-
+        'single_pages/landing.html'
     )

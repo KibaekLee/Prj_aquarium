@@ -2,35 +2,18 @@
 
 {% block main_area %}
 
-<h1>Data Charts
-    <!-- 만약 views.py로부터 전달받은 category 변수가 존재한다면 (카테고리 페이지 접근 시)-->
-    {% if category %}
-    <!-- 카테고리 뱃지를 카테고리 페이지 제목 앞에 표시한다 -->
-    <span class="badge badge-secondary">{{ category }}</span>
-    {% endif %}
-    {% if tag %}
-    <!-- 테그 뱃지를 카테고리 페이지 제목 앞에 표시한다 -->
-    <span class="badge badge-light">
-        <i class="fas fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>
-    {% endif %}
-</h1>
+<h1>Data Charts</h1>
+
 <input type="text" id="example">
-{% if post_list.exists %}
-{% for p in post_list %}
+
 <!-- Blog post -->
 <div class="card" id="post-{{p.pk}}">
 
-    <h2 class="card-title h4 ">{{p.title}}</h2>
-    <!-- 블로그 포스트 카드의 그림영역 -->
     <div id="chart1"></div>
-    <!-- 블로그 글의 요약 부분 -->
     
 </div>
-{% endfor %}
 
-{% else %}
-<h3>아직 게시물이 없습니다</h3>
-{% endif %}
+
 
 <!-- Pagination -->
 {% if is_paginated %}
@@ -57,5 +40,75 @@
 </ul>
 {% endif %}
 
+<script>
+
+            // 비동기방식
+            var async = new XMLHttpRequest();
+            async.onreadystatechange = function(event) {
+                if (async.readyState == 4 && async.status == 200) {
+                    console.log(async.responseText);
+                    var deserializeJson = JSON.parse(async.responseText);
+                    var items = JSON.parse(deserializeJson);
+
+                    var aPH = ["pH"];
+                    var aX = ["x"];
+                    var aTemperature = ["T"]
+
+                    for (item of items) {
+                        aPH.push(item.fields.ph);
+                        aTemperature.push(item.fields.temperature);
+                        aX.push(item.fields.created_at.split('.')[0]);
+                    }
+
+                    var chart = bb.generate({
+                      data: {
+                        x: "x",
+                        xFormat: "%Y-%m-%dT%H:%M:%S",
+                        columns: [aX, aPH, aTemperature],
+                        type: "line", // for ESM specify as: line()
+                      },
+                      axis: {
+                        x: {
+                          type: "timeseries",
+                          tick: {
+                            format: "%Y-%m-%dT%H:%M:%S"
+                          }
+                        }
+                      },
+                      bindto: "#chart1"
+                    });
+                        }
+                    };
+
+
+
+
+
+
+        const input = document.getElementById('example');
+        const datepicker = new TheDatepicker.Datepicker(input);
+        datepicker.render();
+
+        datepicker.options.onSelect((event, day, previousDay) => {
+            console.log(day.year);
+            console.log(day.month);
+            console.log(day.dayNumber);
+            console.log(day);
+            var day1 = day.dayNumber;
+            var month = day.month;
+            var year=day.year;
+
+            console.log(typeof day1);
+            console.log(typeof month);
+            console.log(typeof year);
+
+
+
+            var url = '/api/past/?year=' + year + '&month=' + month + '&dayNumber=' + day1;
+            console.log(url);
+            async.open('GET', url, true);
+            async.send();
+        });
+</script>
 
 {% endblock %}

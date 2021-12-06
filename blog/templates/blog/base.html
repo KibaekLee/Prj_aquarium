@@ -27,46 +27,12 @@
 
 <div class="container my-3">
     <div class="row">
-        <div class="col-md-8 col-lg-9" id="main-area">
+        <div class="col-md-8 col-lg-12" id="main-area">
             {% block main_area %}
 
             {% endblock %}
         </div>
-        
-        <div class="col-md-4 col-lg-3">
-            <!-- Search widget -->
-            <div class="card mb-4">
-                <!-- 검색 영역의 헤더부분 -->
-                <div class="card-header">Search</div>
-                <!-- 검색 영역의 바디부분 (검색어와 검색버튼이 존재하는 영역)-->
-                <div class="card-body">
-                    <div class="input-group">
-                        <input id="search-input" class="form-control" type="text" placeholder="검색어 입력">
-                        <button onclick = "searchPost();" class="btn btn-primary" id="button-search" type="button">Go!</button>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Categories widget -->
-            <div class="card mb-4" id="categories-card">
-                <div class="card-header" >Categories</div>
-                <div class="card-body">
-                    <div class="row">
-                        <ul class="list-unstyled mb-0">
-                            {% for category in categories %}
-                            <li>
-                                <a href="{{ category.get_absolute_url }}">
-                                    {{ category }} ({{ category.post_set.count }})
-                                </a>
-                            </li>
-                            {% endfor %}
-                            <li>
-                                <a href="/blog/category/no_category/">미분류 ({{ no_category_post_count }})</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -104,72 +70,6 @@
         integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
         crossorigin="anonymous"></script>
 
-<script>
-        
-            // 비동기방식
-            var async = new XMLHttpRequest();
-            async.onreadystatechange = function(event) {
-                if (async.readyState == 4 && async.status == 200) {
-                    console.log(async.responseText);
-                    var deserializeJson = JSON.parse(async.responseText);
-                    var items = JSON.parse(deserializeJson);
 
-                    var aPH = ["pH"];
-                    var aX = ["x"];
-
-                    for (item of items) {
-                        aPH.push(item.fields.ph);
-                        aX.push(item.fields.created_at.split('.')[0]);
-                    }
-
-                    var chart = bb.generate({
-                      data: {
-                        x: "x",
-                        xFormat: "%Y-%m-%dT%H:%M:%S",
-                        columns: [aX, aPH, ],
-                        type: "line", // for ESM specify as: line()
-                      },
-                      axis: {
-                        x: {
-                          type: "timeseries",
-                          tick: {
-                            format: "%Y/%m/%d %H:%M:%S"
-                          }
-                        }
-                      },
-                      bindto: "#chart1"
-                    });
-                        }
-                    };
-            
-
-        
-
-        
-        const input = document.getElementById('example');
-        const datepicker = new TheDatepicker.Datepicker(input);
-        datepicker.render();
-
-        datepicker.options.onSelect((event, day, previousDay) => {
-            console.log(day.year);
-            console.log(day.month);
-            console.log(day.dayNumber);
-            console.log(day);
-            var day1 = day.dayNumber;
-            var month = day.month;
-            var year=day.year;
-            
-            console.log(typeof day1);
-            console.log(typeof month);
-            console.log(typeof year);
-            
-
-
-            var url = '/api/ph/?year=' + year + '&month=' + month + '&dayNumber=' + day1;
-            console.log(url);
-            async.open('GET', url, true);
-            async.send();
-        });
-</script>
 </body>
 </html>
