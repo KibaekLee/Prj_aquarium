@@ -4,5 +4,5 @@ from api import views
 
 urlpatterns = [
     path('arduino/', views.ArduinoView.as_view()),
-    # path('ph/now', views.nowPHView.as_view()),
+    path('past/', views.pastView.as_view()),
 ]
