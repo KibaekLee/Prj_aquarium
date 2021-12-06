@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.core import serializers
+from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -63,11 +64,16 @@ class pastView(View):
         month = request.GET.get('month', None)
         year = request.GET.get('year', None)
 
+        print(day)
+        print(month)
+        print(year)
+
         phs = serializers.serialize("json", Arduino.objects.filter(
-            created_at__gte=datetime.date(int(year), int(month), int(day))
-
+            created_at__date__range=(
+                datetime.date(int(year), int(month), int(day)),
+                datetime.date(int(year), int(month), int(day))
+            )
         ))
-
 
         return JsonResponse(phs,
                             safe=False,
