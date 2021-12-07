@@ -4,7 +4,7 @@ from markdownx.admin import MarkdownxModelAdmin
 from .models import Post
 
 
-admin.site.register(Post, MarkdownxModelAdmin) #Post 를 관리자 페이지에 추가
+# admin.site.register(Post, MarkdownxModelAdmin) #Post 를 관리자 페이지에 추가
 
 
 

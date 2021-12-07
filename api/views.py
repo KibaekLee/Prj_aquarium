@@ -36,9 +36,13 @@ class ArduinoView(View):
             req = json.loads(request.body)
             pHValue = round(req['pH'], 2)
             TValue = round(req['T'], 1)
+            print('---------------------------------------------')
             print('pH: ' + str(pHValue) + '\n')
             print('T: ' + str(TValue) + '\n')
-            arduino= Arduino(ph=pHValue, temperature=TValue)
+            print('Action_result: ' + req['action_result'] + '\n')
+            print('Status: ' + req['message'] + '\n')
+            print('---------------------------------------------')
+            arduino = Arduino(ph=pHValue, temperature=TValue)
             arduino.save()
 
             data = {
@@ -91,6 +95,7 @@ class pastView(View):
             TValue = round(req['T'], 1)
             print('pH: ' + str(pHValue) + '\n')
             print('T: ' + str(TValue) + '\n')
+            print('Action_result: ' + req['action_result'] + '\n')
 
             arduino = Arduino(ph=pHValue, temperature=TValue)
             arduino.save()
