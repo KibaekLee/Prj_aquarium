@@ -86,26 +86,26 @@ class pastView(View):
                             )
 
 
-    # POST 요청을 처리하기 위해서 post함수를 재정의
-    def post(self, request, *args, **kwargs):
-
-        if request.META['CONTENT_TYPE'] == 'application/json':
-            req = json.loads(request.body)
-            pHValue = round(req['pH'], 2)
-            TValue = round(req['T'], 1)
-            print('pH: ' + str(pHValue) + '\n')
-            print('T: ' + str(TValue) + '\n')
-            print('Action_result: ' + req['action_result'] + '\n')
-
-            arduino = Arduino(ph=pHValue, temperature=TValue)
-            arduino.save()
-
-            data = {
-                'message': 'success'
-            }
-            return JsonResponse(data, status=200)
-
-        data = {
-            'massage': 'failed'
-        }
-        return JsonResponse(data, status=403)
+    # # POST 요청을 처리하기 위해서 post함수를 재정의
+    # def post(self, request, *args, **kwargs):
+    #
+    #     if request.META['CONTENT_TYPE'] == 'application/json':
+    #         req = json.loads(request.body)
+    #         pHValue = round(req['pH'], 2)
+    #         TValue = round(req['T'], 1)
+    #         print('pH: ' + str(pHValue) + '\n')
+    #         print('T: ' + str(TValue) + '\n')
+    #         print('Action_result: ' + req['action_result'] + '\n')
+    #
+    #         arduino = Arduino(ph=pHValue, temperature=TValue)
+    #         arduino.save()
+    #
+    #         data = {
+    #             'message': 'success'
+    #         }
+    #         return JsonResponse(data, status=200)
+    #
+    #     data = {
+    #         'massage': 'failed'
+    #     }
+    #     return JsonResponse(data, status=403)

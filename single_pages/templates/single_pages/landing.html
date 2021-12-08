@@ -21,7 +21,7 @@
 
 <section>
     <div class="container mt-5 ">
-        <h2 class="text-light">Today's pH and temperature Grape</h2>
+        <h2 class="text-light">Today's pH and temperature Graph</h2>
         <li class="row justify-content-between">
 
             <!--  grape   -->
@@ -38,26 +38,10 @@
 
                             document.write(year + '-' + month + '-' + date )
                         </script>
-                    </p>
-                    <div id="axisLabelPosition"></div>
-                </div>
-            </div>
-
-
-            <div class="mt-5">
-                <h2 class="text-light">Recent Charts</h2>
-                <div class="card mt-1">
-                    <div class="card-body">
-                        <h6>
-                            <a class="text_decoration-none text-dark">
-
-                            </a>
-                        </h6>
-                        <span class="badge badge-pill badge-light float-right">
-                        </span>
+                        </p>
+                        <div id="axisLabelPosition"></div>
                     </div>
                 </div>
-            </div>
         </li>
     </div>
 </section>
@@ -97,6 +81,7 @@
                         aX.push(item.fields.created_at.split('.')[0]);
                     }
 
+                    // 데일리 차트생성
                     var chart = bb.generate({
 
                       data: {
@@ -154,6 +139,7 @@
         }
 
         setTimeout(stopArduino,10000);
+
 
 </script>
 
